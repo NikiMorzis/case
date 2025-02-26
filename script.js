@@ -173,8 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 const superWinChance = caseData.superWinChance;
-                const normalWinChance = 0.45;
-                const lowWinChance = 0.3;
+                const normalWinChance = 0.45; // Увеличиваем шанс нормального выигрыша
+                const lowWinChance = 0.3; // Добавим шанс небольшого выигрыша
                 const randomValue = Math.random();
                 let moneyWon = 0;
 
@@ -182,13 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     moneyWon = cost * (Math.floor(Math.random() * 100) + 50);
                     console.log("СУПЕР ВЫИГРЫШ!", moneyWon);
                 } else if (randomValue < superWinChance + normalWinChance) {
-                    moneyWon = cost * (Math.random() * 2 + 0.5);
+                    moneyWon = cost * (Math.random() * 2 + 0.5); // Нормальный выигрыш (0.5x - 2.5x стоимости)
                     console.log("ОБЫЧНЫЙ ВЫИГРЫШ!", moneyWon);
                 } else if (randomValue < superWinChance + normalWinChance + lowWinChance) {
-                    moneyWon = cost * (Math.random() * 0.4 + 0.1);
+                    moneyWon = cost * (Math.random() * 0.4 + 0.1); // Небольшой выигрыш (0.1x - 0.5x стоимости)
                     console.log("НЕБОЛЬШОЙ ВЫИГРЫШ", moneyWon);
                 } else {
-                    moneyWon = cost * (Math.random() * 0.1);
+                    moneyWon = cost * (Math.random() * 0.1); //  Минимальный выигрыш (0x - 0.1x стоимости)
                     console.log("МИНИМАЛЬНЫЙ ВЫИГРЫШ", moneyWon);
                 }
 
