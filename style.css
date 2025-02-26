@@ -32,7 +32,7 @@ body {
     min-height: 60vh;
     position: relative;
     flex-grow: 1;
-    animation: fadeIn 0.5s ease-out; /* Анимация появления контейнера */
+    animation: fadeIn 0.5s ease-out;
 }
 
 /* Header */
@@ -52,7 +52,7 @@ header {
     font-weight: 700;
     transition: color 0.3s ease;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    animation: bounceIn 1s ease-out; /* Анимация логотипа */
+    animation: bounceIn 1s ease-out;
 }
 
 .logo:hover {
@@ -73,7 +73,7 @@ main {
     background-color: #1E293B;
     border-radius: 20px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    animation: slideInUp 0.7s ease-out; /* Анимация появления баланса */
+    animation: slideInUp 0.7s ease-out;
 }
 
 .balance-info, .best-win-info {
@@ -88,7 +88,7 @@ main {
     color: #64FFDA;
     margin-right: 20px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    animation: scaleUp 0.5s ease-out; /* Анимация иконок */
+    animation: scaleUp 0.5s ease-out;
 }
 
 .balance-info div, .best-win-info div {
@@ -121,7 +121,7 @@ main {
     display: flex;
     align-items: center;
     font-size: 1.1em;
-    animation: pulse 1.5s infinite ease-in-out; /* Анимация для кнопки */
+    animation: pulse 1.5s infinite ease-in-out;
 }
 
 .action-button i {
@@ -154,7 +154,7 @@ main {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     border: 1px solid #2D3748;
-    animation: scaleUp 0.5s ease-out; /* Анимация для кейсов */
+    animation: scaleUp 0.5s ease-out;
 }
 
 .case:hover {
@@ -220,10 +220,10 @@ main {
 
 /* Notifications */
 #win-notification, #total-win-notification {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;  /* Изменено с absolute на fixed */
+    top: 50%;       /* Центрирование по вертикали */
+    left: 50%;      /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%); /* Точное центрирование */
     background-color: rgba(100, 255, 218, 0.9);
     color: #0A192F;
     padding: 20px 35px;
@@ -239,13 +239,12 @@ main {
 #total-win-notification {
     background-color: rgba(168, 178, 209, 0.9);
     color: #121826;
-    top: 100px;
 }
 
 #win-notification.show, #total-win-notification.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    animation: slideInDown 0.5s ease-out; /* Анимация появления уведомлений */
+    transform: translate(-50%, -50%); /* Убираем translateY для предотвращения прыжка */
+    animation: slideInScale 0.5s ease-out; /* Анимация появления */
 }
 
 /* Modal */
@@ -428,7 +427,6 @@ main {
     }
 }
 
-/* Animation for modal */
 @keyframes modal-open {
     from {
         opacity: 0;
@@ -437,6 +435,17 @@ main {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes slideInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
     }
 }
 
