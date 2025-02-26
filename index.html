@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор Кейсов</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>Кейс Симулятор</h1>
+            </div>
+            <div class="profile-balance">
+                <div class="profile">
+                    <span>Лучший выигрыш: <span id="best-win">0</span> ₽</span>
+                </div>
+                <div class="balance">
+                    <span>Баланс: <span id="balance"></span> ₽</span>
+                    <button id="add-balance-button">+1000 ₽</button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="case-grid">
+                <div class="case" data-case-id="1">
+                    <div class="case-content">
+                        <div class="case-title">Начальный</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">100</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="2">
+                    <div class="case-content">
+                        <div class="case-title">Бронзовый</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">150</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="3">
+                    <div class="case-content">
+                        <div class="case-title">Серебряный</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">200</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="4">
+                    <div class="case-content">
+                        <div class="case-title">Золотой</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">300</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="5">
+                    <div class="case-content">
+                        <div class="case-title">Платиновый</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">500</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="6">
+                    <div class="case-content">
+                        <div class="case-title">Легендарный</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">1000</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="7">
+                    <div class="case-content">
+                        <div class="case-title">Эпический</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">10000</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="8">
+                    <div class="case-content">
+                        <div class="case-title">Мифический</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">25000</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="9">
+                    <div class="case-content">
+                        <div class="case-title">Божественный</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">50000</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+
+                <div class="case" data-case-id="10">
+                    <div class="case-content">
+                        <div class="case-title">Космический</div>
+                    </div>
+                    <p>Цена: <span class="case-cost">100000</span> ₽</p>
+                    <button class="open-case">Открыть</button>
+                </div>
+            </div>
+
+            <div class="results">
+                <h2>Результаты</h2>
+                <div id="results-container">
+                    <!-- Результаты будут добавлены здесь -->
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="coin-container"></div>
+    <div class="overlay"></div>
+    <script src="script.js"></script>
+</body>
+</html>
