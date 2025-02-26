@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const caseGrid = document.querySelector('.case-grid');
     const resultsContainer = document.getElementById('results-container');
     const coinContainer = document.getElementById('coin-container');
+    const winNotification = document.getElementById('win-notification');
     let lastAddBalanceTime = 0;
 
     function updateBalanceDisplay() {
@@ -42,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function animateCaseOpening(caseElement) {
         return new Promise((resolve, reject) => {
             caseElement.classList.add('case-opening');
-            // Additional animations here for a better opening effect
 
             const animationEndHandler = () => {
                 caseElement.classList.remove('case-opening');
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function animateBalanceChange(newBalance) {
         const startBalance = parseFloat(balanceElement.textContent);
-        const duration = 1000; // ms
+        const duration = 1000;
         const startTime = performance.now();
 
         function animate(currentTime) {
@@ -82,21 +82,28 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animate);
     }
 
-    function displayResult(caseId, moneyWon) {
+    function displayResult(caseName, moneyWon) {
         const resultItem = document.createElement('div');
         resultItem.classList.add('result-item');
-        resultItem.innerHTML = `Кейс ${caseId}: Вы выиграли ${moneyWon.toFixed(2)} ₽!`;
+        resultItem.innerHTML = `Кейс "${caseName}": Вы выиграли ${moneyWon.toFixed(2)} ₽!`;
         resultsContainer.appendChild(resultItem);
 
-        results.push({ caseId: caseId, moneyWon: moneyWon.toFixed(2) });
+        results.push({ caseId: caseName, moneyWon: moneyWon.toFixed(2) });
         localStorage.setItem('results', JSON.stringify(results));
 
-        // Add fade-in animation
         resultItem.style.opacity = 0;
         resultItem.style.transition = 'opacity 0.5s ease-in-out';
         setTimeout(() => {
             resultItem.style.opacity = 1;
-        }, 50); // Small delay to ensure transition is applied
+        }, 50);
+    }
+
+    function showWinNotification(moneyWon) {
+        winNotification.textContent = `Вы выиграли ${moneyWon.toFixed(2)} ₽!`;
+        winNotification.classList.add('show');
+        setTimeout(() => {
+            winNotification.classList.remove('show');
+        }, 3000); // Hide after 3 seconds
     }
 
     async function openCase(caseId, cost, caseElement) {
@@ -112,26 +119,31 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('balance', balance);
             animateBalanceChange(balance);
 
-            // Add a small delay before the case opening animation
             setTimeout(async () => {
                 try {
                     await animateCaseOpening(caseElement);
 
                     let moneyWon = 0;
                     const superWinChance = 0.01;
-                    const normalWinChance = 0.5;
+                    const normalWinChance = 0.45; // Увеличиваем шанс нормального выигрыша
+                    const lowWinChance = 0.3; // Добавим шанс небольшого выигрыша
 
                     console.log(`Кейс ${caseId}: cost=${cost}, superWinChance=${superWinChance}, normalWinChance=${normalWinChance}`);
 
-                    if (Math.random() < superWinChance) {
-                        moneyWon = cost * (Math.floor(Math.random() * 100) + 50);
+                    const randomValue = Math.random();
+
+                    if (randomValue < superWinChance) {
+                        moneyWon = cost * (Math.floor(Math.random() * 100) + 50); // Супер выигрыш (50x - 150x стоимости)
                         console.log("СУПЕР ВЫИГРЫШ!", moneyWon);
-                    } else if (Math.random() < normalWinChance) {
-                        moneyWon = cost * (Math.random() * 3);
+                    } else if (randomValue < superWinChance + normalWinChance) {
+                        moneyWon = cost * (Math.random() * 2 + 0.5); // Нормальный выигрыш (0.5x - 2.5x стоимости)
                         console.log("ОБЫЧНЫЙ ВЫИГРЫШ!", moneyWon);
+                    } else if (randomValue < superWinChance + normalWinChance + lowWinChance) {
+                        moneyWon = cost * (Math.random() * 0.4 + 0.1); // Небольшой выигрыш (0.1x - 0.5x стоимости)
+                        console.log("НЕБОЛЬШОЙ ВЫИГРЫШ", moneyWon);
                     } else {
-                        moneyWon = cost * (Math.random() * 0.2);
-                        console.log("МАЛЕНЬКИЙ ВЫИГРЫШ!", moneyWon);
+                        moneyWon = cost * (Math.random() * 0.1); //  Минимальный выигрыш (0x - 0.1x стоимости)
+                        console.log("МИНИМАЛЬНЫЙ ВЫИГРЫШ", moneyWon);
                     }
 
                     moneyWon = parseFloat(moneyWon.toFixed(2));
@@ -147,21 +159,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateBestWinDisplay();
                     }
 
-                    // Animate more coins
-                    const numCoins = Math.min(moneyWon / 5, 70); // Increase coin count
+                    const numCoins = Math.min(moneyWon / 5, 70);
                     for (let j = 0; j < numCoins; j++) {
                         const startX = caseElement.offsetLeft + caseElement.offsetWidth / 2;
                         const startY = caseElement.offsetTop + caseElement.offsetHeight / 2;
                         animateCoin(startX, startY);
                     }
 
-                    displayResult(caseId, moneyWon);
+                    const caseName = caseElement.querySelector('.case-title').textContent;
+                    displayResult(caseName, moneyWon);
+                    showWinNotification(moneyWon);
 
                 } catch (error) {
                     console.error("Ошибка при открытии кейса:", error);
                     alert("Произошла ошибка при открытии кейса. Пожалуйста, попробуйте еще раз.");
                 }
-            }, 300); // Adjust delay as needed
+            }, 300);
 
         } else {
             alert('Недостаточно средств!');
@@ -169,14 +182,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addBalance() {
-        balance += 1000;
-        localStorage.setItem('balance', balance);
-        animateBalanceChange(balance);
+        const currentTime = Date.now();
+        const timeSinceLastAdd = currentTime - lastAddBalanceTime;
+
+        if (timeSinceLastAdd >= 60000) {
+            balance += 1000;
+            localStorage.setItem('balance', balance);
+            animateBalanceChange(balance);
+            lastAddBalanceTime = currentTime;
+            updateAddBalanceButton();
+        }
+
+        updateAddBalanceButton();
     }
 
     function updateAddBalanceButton() {
-        addBalanceButton.textContent = "+1000 ₽";
+        const currentTime = Date.now();
+        const timeSinceLastAdd = currentTime - lastAddBalanceTime;
+
+        if (timeSinceLastAdd >= 60000) {
+            addBalanceButton.textContent = "+1000 ₽ (доступно)";
+            addBalanceButton.disabled = false;
+        } else {
+            const timeLeft = (60000 - timeSinceLastAdd) / 1000;
+            addBalanceButton.textContent = `+1000 ₽ (через ${timeLeft.toFixed(0)}с)`;
+            addBalanceButton.disabled = true;
+        }
     }
+    setInterval(updateAddBalanceButton, 1000);
 
     addBalanceButton.addEventListener('click', () => {
         addBalance();
