@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let bestWin = parseFloat(localStorage.getItem('bestWin')) || 0;
     let casesOpened = parseInt(localStorage.getItem('casesOpened')) || 0;
     let promoCodesUsed = JSON.parse(localStorage.getItem('promoCodesUsed')) || {};
+    let lastAddBalanceTime = parseFloat(localStorage.getItem('lastAddBalanceTime')) || 0; // Получаем из localStorage
 
     // === DOM-элементы ===
     const balanceElement = document.getElementById('balance');
@@ -24,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const promoCodeMessage = document.getElementById('promo-code-message');
 
     let selectedCaseData = null;
-    let lastAddBalanceTime = 0;
 
     // === Данные о кейсах ===
     const casesData = [
@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('balance', balance);
             updateBalanceDisplay();
             lastAddBalanceTime = currentTime;
+            localStorage.setItem('lastAddBalanceTime', lastAddBalanceTime); // Сохраняем в localStorage
             updateAddBalanceButton();
         }
 
@@ -233,6 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBalanceDisplay();
     updateBestWinDisplay();
     updateAddBalanceButton();
+
+    // Вызываем updateAddBalanceButton каждые 1000мс (1 секунда)
+    setInterval(updateAddBalanceButton, 1000);
 
     // Обработчик для кнопки добавления баланса
     addBalanceButton.addEventListener('click', () => {
