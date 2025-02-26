@@ -343,6 +343,36 @@ main {
     .background {
         background-size: cover; /* Adjust background size for mobile */
     }
+
+    /* Уменьшаем размеры кнопок */
+    .balance button, .case button, #clicker-button, #open-case-modal-button {
+        padding: 10px 18px; /* Slightly smaller padding */
+        font-size: 1em;
+    }
+
+    /* Уменьшаем отступы между элементами */
+    .profile-balance, .case-grid, .results {
+        margin-bottom: 10px;
+    }
+    /* Adjust modal for smaller screens */
+    .modal-content {
+        width: 90%;
+        margin: 30% auto; /* Adjust margin for smaller screens */
+        padding: 15px; /* Reduce padding */
+    }
+
+    .modal-controls {
+        flex-direction: column; /* Stack controls vertically */
+        align-items: stretch; /* Make inputs and button full width */
+        gap: 10px;
+    }
+
+    #open-count {
+        width: 100%; /* Full width */
+    }
+    #total-win-notification {
+        font-size: 1.3em;
+    }
 }
 
 /* Win notification */
