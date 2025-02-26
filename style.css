@@ -36,7 +36,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     width: 90%;
     max-width: 1400px;
-    margin: 20px auto; /* Center the container */
+    margin: 20px auto;
     overflow: hidden;
     backdrop-filter: blur(10px);
     padding: 20px;
@@ -125,7 +125,7 @@ main {
 .case:hover {
     transform: translateY(-10px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.9);
-    background-color: rgba(61, 61, 61, 0.7); /* Darken background on hover */
+    background-color: rgba(61, 61, 61, 0.7);
 }
 
 .case-content {
@@ -327,4 +327,25 @@ main {
     .result-item {
         padding: 15px;
     }
+}
+
+/* Win notification */
+#win-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(68, 170, 85, 0.9);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+#win-notification.show {
+    opacity: 1;
 }
