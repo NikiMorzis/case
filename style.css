@@ -273,34 +273,36 @@ main {
 @media (max-width: 768px) {
     .container {
         width: 95%;
-        padding: 15px;
+        max-width: 100%; /* Allow container to take full width */
+        margin: 10px; /* Reduce margin on smaller screens */
+        padding: 15px; /* Reduce padding inside container */
     }
 
     header {
-        flex-direction: column;
+        flex-direction: column; /* Stack elements in header */
         align-items: center;
-        gap: 20px;
+        gap: 15px; /* Reduce gap */
         padding: 15px 0;
     }
 
     .logo {
-        margin-bottom: 15px;
         font-size: 2em;
+        margin-bottom: 10px; /* Add some space below the logo */
     }
 
     .profile-balance {
-        flex-direction: column;
+        flex-direction: column; /* Stack profile and balance */
         align-items: center;
         gap: 15px;
     }
 
     .case-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
+        grid-template-columns: 1fr; /* Single column layout for cases */
+        gap: 15px; /* Reduce gap */
     }
 
     .case {
-        padding: 20px;
+        padding: 15px;
     }
 
     .case-content {
@@ -327,6 +329,19 @@ main {
     .result-item {
         padding: 15px;
     }
+    .clicker {
+        margin-top: 10px;
+    }
+
+    #win-notification {
+        font-size: 1em;
+        bottom: 10px; /* Adjust notification position */
+        padding: 10px 15px;
+    }
+
+    .background {
+        background-size: cover; /* Adjust background size for mobile */
+    }
 }
 
 /* Win notification */
@@ -348,4 +363,28 @@ main {
 
 #win-notification.show {
     opacity: 1;
+}
+
+/*Clicker styles*/
+.clicker {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#clicker-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+#clicker-button:hover {
+    background-color: #3e8e41;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
