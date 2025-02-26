@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let bestWin = parseFloat(localStorage.getItem('bestWin')) || 0;
     let casesOpened = parseInt(localStorage.getItem('casesOpened')) || 0;
     let promoCodesUsed = JSON.parse(localStorage.getItem('promoCodesUsed')) || {};
-    let lastAddBalanceTime = parseFloat(localStorage.getItem('lastAddBalanceTime')) || 0; // Получаем из localStorage
+    let lastAddBalanceTime = parseFloat(localStorage.getItem('lastAddBalanceTime')) || 0;
 
     // === DOM-элементы ===
     const balanceElement = document.getElementById('balance');
@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const caseGrid = document.getElementById('case-grid');
     const resultsContainer = document.getElementById('results-container');
     const coinContainer = document.getElementById('coin-container');
-    const winNotification = document.getElementById('win-notification');
-    const totalWinNotification = document.getElementById('total-win-notification');
+    const totalWinNotification = document.getElementById('total-win-notification'); // Оставляем только общее уведомление
     const caseModal = document.getElementById('case-modal');
     const closeModalButton = caseModal.querySelector('.close-button');
     const openCaseModalButton = document.getElementById('open-case-modal-button');
@@ -59,13 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showWinNotification(moneyWon) {
-        winNotification.textContent = `Вы выиграли ${moneyWon.toFixed(2)} ₽!`;
-        winNotification.classList.add('show');
-        setTimeout(() => {
-            winNotification.classList.remove('show');
-        }, 3000);
-    }
 
     function showTotalWinNotification(totalWon) {
         totalWinNotification.textContent = `Общий выигрыш: ${totalWon.toFixed(2)} ₽!`;
@@ -82,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div id="total-cost-modal"></div> <!-- Место для отображения общей стоимости -->
         `;
         updateTotalCost(caseData);
-          // Слушаем изменения в input с количеством кейсов внутри модалки (ДОБАВЛЕНО ЗДЕСЬ!)
-          openCountInput.addEventListener('input', () => {
+        // Слушаем изменения в input с количеством кейсов внутри модалки (ДОБАВЛЕНО ЗДЕСЬ!)
+        openCountInput.addEventListener('input', () => {
             if (selectedCaseData) {
                 updateTotalCost(selectedCaseData);
             }
@@ -166,14 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     animateCoin(startX, startY);
                 }
 
-                showWinNotification(moneyWon);
-                totalWon += moneyWon;
+                totalWon += moneyWon; // Суммируем выигрыш в totalWon
             } else {
                 alert('Недостаточно средств!');
                 break;
             }
         }
-
         if (totalWon > 0) {
             showTotalWinNotification(totalWon);
         }
@@ -252,9 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (selectedCaseData) {
                 displaySelectedCase(selectedCaseData);
-                  // Слушаем изменения в input с количеством кейсов внутри модалки (ДОБАВЛЕНО ЗДЕСЬ!)
+                // Слушаем изменения в input с количеством кейсов внутри модалки (ДОБАВЛЕНО ЗДЕСЬ!)
                 openCountInput.addEventListener('input', () => {
-                  updateTotalCost(selectedCaseData);
+                    updateTotalCost(selectedCaseData);
                 });
                 caseModal.style.display = 'block';
             }
@@ -272,9 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const openCount = parseInt(openCountInput.value, 10) || 1; // Use value or default to 1
             const totalWon = openCase(selectedCaseData, openCount); // Открываем кейс и получаем общий выигрыш
             caseModal.style.display = 'none'; // Закрываем модальное окно после открытия кейса
-            if (totalWon > 0) {
-                showTotalWinNotification(totalWon); // Показываем уведомление об общем выигрыше
-            }
         }
     });
 
