@@ -1,0 +1,33 @@
+/* inventory.css */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.inventory-item {
+    background-color: #1E293B;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.inventory-item:hover {
+    transform: translateY(-5px);
+}
+
+.inventory-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.inventory-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #E6F1FF;
+}
