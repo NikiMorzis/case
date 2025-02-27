@@ -13,19 +13,26 @@
         <header>
             <div class="logo">
                 <a href="index.html">
-                    <span>Инвентарь</span>
+                    <span>Твой Логотип</span>
                 </a>
             </div>
             <nav>
                 <a href="index.html">Главная</a>
                 <a href="shop.html">Магазин</a>
+                <a href="profile.html">Профиль</a>
             </nav>
         </header>
 
         <main>
             <h1>Инвентарь</h1>
-            <div class="inventory-grid" id="inventory-grid">
-                <!-- Карточки автомобилей из инвентаря будут добавлены здесь -->
+
+            <div class="inventory-controls">
+                <button id="sort-asc">По возрастанию цены</button>
+                <button id="sort-desc">По убыванию цены</button>
+            </div>
+
+            <div id="inventory-container" class="inventory-grid">
+                <!-- Здесь будет отображаться инвентарь -->
             </div>
         </main>
     </div>
