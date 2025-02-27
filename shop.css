@@ -54,3 +54,34 @@
     background-color: #A8B2D1;
     color: #121826;
 }
+
+/* Стили для фильтров и сортировки */
+.shop-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #1E293B;
+    border-radius: 8px;
+}
+
+.shop-filters label {
+    color: #8892B0;
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+.shop-filters select {
+    padding: 8px;
+    border: 1px solid #2D3748;
+    border-radius: 6px;
+    background-color: #1E293B;
+    color: #CCD6F6;
+    font-size: 1em;
+}
+
+.shop-filters select:focus {
+    outline: none;
+    border-color: #64FFDA;
+}
