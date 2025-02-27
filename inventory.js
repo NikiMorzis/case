@@ -1,79 +1,95 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const inventoryGrid = document.getElementById('inventory-grid');
+    const sortAscButton = document.getElementById('sort-asc');
+    const sortDescButton = document.getElementById('sort-desc');
+    const inventoryContainer = document.getElementById('inventory-container');
 
-    function displayInventory() {
-        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+    function displayInventory(inventory) {
+        inventoryContainer.innerHTML = ''; // Очищаем контейнер
 
-        if (inventory.length === 0) {
-            inventoryGrid.innerHTML = '<p>Ваш инвентарь пуст.</p>';
-            return;
-        }
+        if (inventory && inventory.length > 0) {
+            inventory.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('inventory-item'); // Добавляем класс для стилизации
 
-        inventoryGrid.innerHTML = inventory.map(item => {
-            const sellPrice = Math.floor(item.price * 0.7); // Цена продажи (70% от начальной)
-            return `
-                <div class="inventory-item">
-                    <img src="" alt="${item.title}" class="inventory-image">
-                    <h2 class="inventory-title">${item.title}</h2>
-                    <p>Цена продажи: ${sellPrice.toLocaleString()} ₽</p>
-                    <button class="sell-button" data-car-id="${item.id}">Продать</button>
-                </div>
-            `;
-        }).join('');
+                itemElement.innerHTML = `
+                    <img src="" alt="${item.name}">
+                    <p class="item-name">${item.name}</p>
+                    <p class="item-price">Цена: ${item.price} ₽</p>
+                    <button class="sell-button" data-item-id="${item.id}">Продать</button>
+                `;
+                inventoryContainer.appendChild(itemElement);
 
-        // Добавляем обработчики событий для кнопок "Продать"
-        const sellButtons = document.querySelectorAll('.sell-button');
-        sellButtons.forEach(button => {
-            button.addEventListener('click', sellCar);
-        });
-    }
-
-   function sellCar(event) {
-        const carId = event.target.dataset.carId;
-        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
-        const carIndex = inventory.findIndex(item => item.id === carId);
-
-        if (carIndex === -1) {
-            alert('Автомобиль не найден в инвентаре.');
-            return;
-        }
-
-        const car = inventory[carIndex];
-        const sellPrice = Math.floor(car.price * 0.7); // Рассчитываем цену продажи
-        let balance = parseFloat(localStorage.getItem('balance')) || 1000;
-
-        balance += sellPrice;
-        localStorage.setItem('balance', balance.toFixed(2));
-
-        // Удаляем автомобиль из инвентаря
-        inventory.splice(carIndex, 1);
-        localStorage.setItem('inventory', JSON.stringify(inventory));
-
-        // Обновляем состояние canBuy в cars в shop.js (делаем снова доступным для покупки)
-        updateCarAvailability(carId, true);
-
-        updateBalanceDisplay();
-        displayInventory();
-
-        alert(`Вы продали ${car.title} за ${sellPrice.toLocaleString()} ₽!`);
-    }
-
-    // Функция для обновления canBuy в localStorage (дублируем, чтобы inventory мог обновлять)
-    function updateCarAvailability(carId, canBuy) {
-        let carData = JSON.parse(localStorage.getItem('carData')) || {};
-        carData[carId] = { canBuy: canBuy };
-        localStorage.setItem('carData', JSON.stringify(carData));
-    }
-
-
-    // Предполагаем, что у тебя есть функция updateBalanceDisplay()
-    function updateBalanceDisplay() {
-        const balanceElement = document.getElementById('balance'); // Получаем элемент баланса
-        if (balanceElement) { // Проверяем, что элемент существует
-            balanceElement.textContent = parseFloat(localStorage.getItem('balance')).toFixed(2); // Обновляем отображение баланса
+                // Обработчик для кнопки "Продать"
+                const sellButton = itemElement.querySelector('.sell-button');
+                sellButton.addEventListener('click', () => {
+                    sellItem(item.id);
+                });
+            });
+        } else {
+            inventoryContainer.innerHTML = '<p>Инвентарь пуст.</p>';
         }
     }
 
-    displayInventory();
-    updateBalanceDisplay();
+    function getInventoryFromLocalStorage() {
+        try {
+            const inventoryString = localStorage.getItem('inventory');
+            return inventoryString ? JSON.parse(inventoryString) : [];
+        } catch (error) {
+            console.error("Ошибка при получении инвентаря из localStorage:", error);
+            return [];
+        }
+    }
+
+    function saveInventoryToLocalStorage(inventory) {
+        try {
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+        } catch (error) {
+            console.error("Ошибка при сохранении инвентаря в localStorage:", error);
+        }
+    }
+
+    function sortInventory(sortBy) {
+        let inventory = getInventoryFromLocalStorage();
+        if (sortBy === 'asc') {
+            inventory.sort((a, b) => a.price - b.price);
+        } else if (sortBy === 'desc') {
+            inventory.sort((a, b) => b.price - a.price);
+        }
+        return inventory;
+    }
+
+    function sellItem(itemId) {
+        let inventory = getInventoryFromLocalStorage();
+        const itemIndex = inventory.findIndex(item => item.id === itemId);
+
+        if (itemIndex !== -1) {
+            const item = inventory[itemIndex];
+            let balance = parseFloat(localStorage.getItem('balance')) || 0;
+            balance += item.price; // Добавляем цену предмета к балансу
+            localStorage.setItem('balance', balance.toFixed(2)); // Сохраняем баланс
+
+            inventory.splice(itemIndex, 1); // Удаляем предмет из инвентаря
+            saveInventoryToLocalStorage(inventory); // Сохраняем инвентарь
+
+            displayInventory(getInventoryFromLocalStorage()); // Обновляем отображение
+
+             alert(`Продано ${item.name} за ${item.price} ₽!`);
+        } else {
+            console.log(`Предмет с ID ${itemId} не найден в инвентаре.`);
+        }
+    }
+
+    sortAscButton.addEventListener('click', () => {
+        const sortedInventory = sortInventory('asc');
+        displayInventory(sortedInventory);
+    });
+
+    sortDescButton.addEventListener('click', () => {
+        const sortedInventory = sortInventory('desc');
+        displayInventory(sortedInventory);
+    });
+
+    // Изначальное отображение инвентаря при загрузке страницы
+    const initialInventory = getInventoryFromLocalStorage();
+    displayInventory(initialInventory);
 });
