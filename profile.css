@@ -1,0 +1,58 @@
+/* profile.css */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #1E293B;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-info h2 {
+    font-size: 1.8em;
+    color: #E6F1FF;
+}
+
+#profile-balance {
+    font-weight: bold;
+    color: #64FFDA;
+}
+
+.promo-code-section {
+    text-align: center;
+    width: 100%;
+}
+
+.promo-code-section h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #8892B0;
+}
+
+.promo-code-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #2D3748;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1em;
+    background-color: #1E293B;
+    color: #CCD6F6;
+    transition: border-color 0.3s ease;
+}
+
+.promo-code-input:focus {
+    border-color: #64FFDA;
+    outline: none;
+}
+
+.promo-code-message {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
