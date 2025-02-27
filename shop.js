@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 'ferrari',
-            title: 'Ferrari',
+            title: 'Ferrari (какая-нибудь)',
             price: 10000000,
             image: 'ferrari.jpg',
             canBuy: true,
@@ -75,8 +75,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    // Добавляем элементы фильтрации и сортировки в HTML (см. ниже)
+    const filterSelect = document.getElementById('filter-select');
+    const sortSelect = document.getElementById('sort-select');
+
     function displayCars() {
-        carGrid.innerHTML = cars.map(car => {
+      // Получаем выбранные значения фильтра и сортировки
+        const filterValue = filterSelect.value;
+        const sortValue = sortSelect.value;
+
+        // Фильтруем автомобили
+        let filteredCars = cars;
+        if (filterValue !== 'all') {
+            filteredCars = cars.filter(car => car.type === filterValue); // Предполагаем, что у вас есть поле type в данных об автомобиле
+        }
+
+        // Сортируем автомобили
+        let sortedCars = filteredCars;
+        if (sortValue !== 'default') {
+            sortedCars = filteredCars.slice().sort((a, b) => { // Создаем копию массива для сортировки, чтобы не менять исходный массив
+                if (sortValue === 'price-asc') {
+                    return a.price - b.price;
+                } else if (sortValue === 'price-desc') {
+                    return b.price - a.price;
+                }
+                return 0;
+            });
+        }
+
+        // Отображаем отфильтрованные и отсортированные автомобили
+        carGrid.innerHTML = sortedCars.map(car => {
             const buttonText = car.canBuy ? 'Купить' : 'Продано';
             const buttonClass = car.canBuy ? 'buy-button' : 'sold-button';
 
@@ -90,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
-        // Добавляем обработчики событий после добавления карточек в DOM
+      // Добавляем обработчики событий после добавления карточек в DOM (как и раньше)
         const buyButtons = document.querySelectorAll('.buy-button');
         buyButtons.forEach(button => {
             button.addEventListener('click', buyCar);
@@ -169,6 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Добавляем обработчики событий для фильтра и сортировки
+    filterSelect.addEventListener('change', displayCars);
+    sortSelect.addEventListener('change', displayCars);
 
     restoreCarAvailability(); // Восстанавливаем состояние canBuy при загрузке
     displayCars();
