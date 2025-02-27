@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const validPromoCodes = {
             "NIKIMORZIS": 25000,
             "SOSAL": 10000,
+            "NIKIMORZISTOP1337": 100000,
         };
 
         if (validPromoCodes[promoCode] && !promoCodesUsed[promoCode]) {
