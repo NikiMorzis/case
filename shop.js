@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const carGrid = document.getElementById('car-grid');
-    const cars = [
+    // Попытка получить cars из localStorage, если нет - используем начальные данные
+    let cars = JSON.parse(localStorage.getItem('cars')) || [
         {
             id: 'e34',
             title: 'BMW E34',
             price: 550000,
             image: 'e34.jpg',
             canBuy: true,
-            type: 'car' // Добавляем тип для классификации (car, motorcycle, etc.)
+            type: 'car'
         },
         {
             id: 'lada2107',
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'kawasakiH2R',
             title: 'KAWASAKI H2R',
             price: 7700000,
-            image: 'kawasakiH2R.jpg', // Нужно добавить изображение
+            image: 'kawasakiH2R.jpg',
             canBuy: true,
             type: 'motorcycle'
         },
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'yamahaR1',
             title: 'Yamaha R1',
             price: 1100000,
-            image: 'yamahaR1.jpg',  // Нужно добавить изображение
+            image: 'yamahaR1.jpg',
             canBuy: true,
             type: 'motorcycle'
         },
@@ -53,15 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'rollsRoyceSpectre',
             title: 'Rolls-Royce Spectre',
             price: 70000000,
-            image: 'rollsRoyceSpectre.jpg', // Нужно добавить изображение
+            image: 'rollsRoyceSpectre.jpg',
             canBuy: true,
             type: 'rollsRoyce'
         },
          {
             id: 'rollsRoyceCulliman',
-            title: 'Rolls-Royce Culliman',
+            title: 'Rolls-Royce Cullinan',
             price: 150000000,
-            image: 'rollsRoyceCulliman.jpg', // Нужно добавить изображение
+            image: 'rollsRoyceCulliman.jpg',
             canBuy: true,
             type: 'rollsRoyce'
         },
@@ -69,31 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'bugattiVeyron',
             title: 'Bugatti Veyron',
             price: 350000000,
-            image: 'bugattiVeyron.jpg', // Нужно добавить изображение
+            image: 'bugattiVeyron.jpg',
             canBuy: true,
             type: 'bugatti'
         }
     ];
 
-    // Добавляем элементы фильтрации и сортировки в HTML (см. ниже)
     const filterSelect = document.getElementById('filter-select');
     const sortSelect = document.getElementById('sort-select');
 
     function displayCars() {
-      // Получаем выбранные значения фильтра и сортировки
         const filterValue = filterSelect.value;
         const sortValue = sortSelect.value;
 
-        // Фильтруем автомобили
         let filteredCars = cars;
         if (filterValue !== 'all') {
-            filteredCars = cars.filter(car => car.type === filterValue); // Предполагаем, что у вас есть поле type в данных об автомобиле
+            filteredCars = cars.filter(car => car.type === filterValue);
         }
 
-        // Сортируем автомобили
         let sortedCars = filteredCars;
         if (sortValue !== 'default') {
-            sortedCars = filteredCars.slice().sort((a, b) => { // Создаем копию массива для сортировки, чтобы не менять исходный массив
+            sortedCars = filteredCars.slice().sort((a, b) => {
                 if (sortValue === 'price-asc') {
                     return a.price - b.price;
                 } else if (sortValue === 'price-desc') {
@@ -103,14 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Отображаем отфильтрованные и отсортированные автомобили
         carGrid.innerHTML = sortedCars.map(car => {
             const buttonText = car.canBuy ? 'Купить' : 'Продано';
             const buttonClass = car.canBuy ? 'buy-button' : 'sold-button';
 
             return `
                 <div class="car-card">
-                    <img src="" alt="${car.title}" class="car-image">  
+                    <img src="" alt="${car.title}" class="car-image">
                     <h2 class="car-title">${car.title}</h2>
                     <p class="car-price">${car.price.toLocaleString()} ₽</p>
                     <button class="${buttonClass}" data-car-id="${car.id}" ${car.canBuy ? '' : 'disabled'}>${buttonText}</button>
@@ -118,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
-      // Добавляем обработчики событий после добавления карточек в DOM (как и раньше)
         const buyButtons = document.querySelectorAll('.buy-button');
         buyButtons.forEach(button => {
             button.addEventListener('click', buyCar);
@@ -135,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!car.canBuy) {
-            return; // Нельзя купить, если уже куплено
+            return;
         }
 
         let balance = parseFloat(localStorage.getItem('balance')) || 1000;
@@ -143,16 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (balance >= car.price) {
             balance -= car.price;
             localStorage.setItem('balance', balance.toFixed(2));
-            updateBalanceDisplay(); // предполагается, что у тебя есть функция updateBalanceDisplay()
+            updateBalanceDisplay();
 
-            // Добавляем автомобиль в инвентарь
             addCarToInventory(car);
 
-            // Отмечаем, что автомобиль больше нельзя купить (и сохраняем)
             car.canBuy = false;
-            updateCarAvailability(carId, false); // Функция для обновления canBuy в localStorage
+            updateCarAvailability(carId, false);
 
-            displayCars(); // Перерисовываем карточки, чтобы кнопка изменилась
+            // Сохраняем обновленный массив cars в localStorage
+            localStorage.setItem('cars', JSON.stringify(cars));
+
+            displayCars();
 
             alert(`Вы купили ${car.title}!`);
         } else {
@@ -162,17 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addCarToInventory(car) {
         let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
-
-        // Проверяем, есть ли уже такой автомобиль в инвентаре (независимо от canSell)
         const carExists = inventory.some(item => item.id === car.id);
 
         if (!carExists) {
-            inventory.push({...car, canSell: true}); // Добавляем флаг canSell для возможности продажи
+            inventory.push({...car, canSell: true});
             localStorage.setItem('inventory', JSON.stringify(inventory));
         }
     }
 
-    // Функция для обновления canBuy в localStorage
     function updateCarAvailability(carId, canBuy) {
         let carData = JSON.parse(localStorage.getItem('carData')) || {};
         carData[carId] = { canBuy: canBuy };
@@ -180,15 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Предполагаем, что у тебя есть функция updateBalanceDisplay()
     function updateBalanceDisplay() {
-        const balanceElement = document.getElementById('balance'); // Получаем элемент баланса
-        if (balanceElement) { // Проверяем, что элемент существует
-            balanceElement.textContent = parseFloat(localStorage.getItem('balance')).toFixed(2); // Обновляем отображение баланса
+        const balanceElement = document.getElementById('balance');
+        if (balanceElement) {
+            balanceElement.textContent = parseFloat(localStorage.getItem('balance')).toFixed(2);
         }
     }
 
-    // Функция для восстановления состояния canBuy при загрузке страницы
     function restoreCarAvailability() {
         let carData = JSON.parse(localStorage.getItem('carData')) || {};
         cars.forEach(car => {
@@ -198,11 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Добавляем обработчики событий для фильтра и сортировки
     filterSelect.addEventListener('change', displayCars);
     sortSelect.addEventListener('change', displayCars);
 
-    restoreCarAvailability(); // Восстанавливаем состояние canBuy при загрузке
+    restoreCarAvailability();
     displayCars();
     updateBalanceDisplay();
 });
