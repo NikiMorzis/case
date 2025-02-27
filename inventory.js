@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function sellCar(event) {
+   function sellCar(event) {
         const carId = event.target.dataset.carId;
         let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
         const carIndex = inventory.findIndex(item => item.id === carId);
@@ -44,22 +44,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         balance += sellPrice;
         localStorage.setItem('balance', balance.toFixed(2));
-        localStorage.setItem('inventory', JSON.stringify(inventory)); // Обновляем инвентарь в localStorage
-        updateBalanceDisplay(); // предполагается, что у тебя есть функция updateBalanceDisplay()
 
         // Удаляем автомобиль из инвентаря
-        inventory.splice(carIndex, 1); // Удаляем элемент из массива
+        inventory.splice(carIndex, 1);
         localStorage.setItem('inventory', JSON.stringify(inventory));
-        displayInventory(); // Обновляем отображение инвентаря
+
+        // Обновляем состояние canBuy в cars в shop.js (делаем снова доступным для покупки)
+        updateCarAvailability(carId, true);
+
+        updateBalanceDisplay();
+        displayInventory();
 
         alert(`Вы продали ${car.title} за ${sellPrice.toLocaleString()} ₽!`);
     }
+
+    // Функция для обновления canBuy в localStorage (дублируем, чтобы inventory мог обновлять)
+    function updateCarAvailability(carId, canBuy) {
+        let carData = JSON.parse(localStorage.getItem('carData')) || {};
+        carData[carId] = { canBuy: canBuy };
+        localStorage.setItem('carData', JSON.stringify(carData));
+    }
+
 
     // Предполагаем, что у тебя есть функция updateBalanceDisplay()
     function updateBalanceDisplay() {
         const balanceElement = document.getElementById('balance'); // Получаем элемент баланса
         if (balanceElement) { // Проверяем, что элемент существует
-            balanceElement.textContent = balance.toFixed(2); // Обновляем отображение баланса
+            balanceElement.textContent = parseFloat(localStorage.getItem('balance')).toFixed(2); // Обновляем отображение баланса
         }
     }
 
