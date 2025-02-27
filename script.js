@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let promoCodesUsed = JSON.parse(localStorage.getItem('promoCodesUsed')) || {};
     let lastAddBalanceTime = parseFloat(localStorage.getItem('lastAddBalanceTime')) || 0;
 
+    // === Переменные для системы уровней и опыта ===
+    let userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
+    let userExperience = parseFloat(localStorage.getItem('userExperience')) || 0;
+    const experiencePerLevel = 1000; // Сколько опыта нужно для повышения уровня
+
     // === DOM-элементы ===
     const balanceElement = document.getElementById('balance');
     const bestWinElement = document.getElementById('best-win');
@@ -22,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const promoCodeInput = document.getElementById('promo-code-input');
     const activatePromoCodeButton = document.getElementById('activate-promo-code');
     const promoCodeMessage = document.getElementById('promo-code-message');
+
+    // === DOM-элементы для отображения уровня ===
+    const levelElement = document.getElementById('user-level'); // Добавьте этот элемент в HTML
 
     let selectedCaseData = null;
 
@@ -107,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateBalanceDisplay();
             promoCodeMessage.textContent = `Промокод активирован! Получено ${validPromoCodes[promoCode]} ₽`;
             promoCodeMessage.style.color = 'green';
+            promoCodeInput.value = '';
+            addExperience(50); // Опыт за активацию промокода
         } else if (promoCodesUsed[promoCode]) {
             promoCodeMessage.textContent = "Этот промокод уже был активирован.";
             promoCodeMessage.style.color = 'red';
@@ -114,6 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
             promoCodeMessage.textContent = "Неверный промокод.";
             promoCodeMessage.style.color = 'red';
         }
+    }
+
+    // === Функция для обновления отображения уровня ===
+    function updateUserLevelDisplay() {
+        if (levelElement) {
+            levelElement.textContent = userLevel;
+        }
+    }
+
+    // === Функция для начисления опыта ===
+    function addExperience(experience) {
+        userExperience += experience;
+        localStorage.setItem('userExperience', userExperience.toFixed(2));
+
+        // Проверяем, достаточно ли опыта для повышения уровня
+        while (userExperience >= experiencePerLevel) {
+            userExperience -= experiencePerLevel;
+            userLevel++;
+            localStorage.setItem('userLevel', userLevel);
+            localStorage.setItem('userExperience', userExperience.toFixed(2));
+            alert(`Поздравляем! Вы достигли ${userLevel} уровня!`); // Или используйте более красивое уведомление
+        }
+        updateUserLevelDisplay();
     }
 
     function openCase(caseData, openCount) {
@@ -157,8 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const startY = caseGrid.offsetTop + caseGrid.offsetHeight / 2;
                     animateCoin(startX, startY);
                 }
+                            casesOpened++;
+                localStorage.setItem('casesOpened', casesOpened); // Сохраняем в localStorage
+                localStorage.setItem('casesOpened', casesOpened);
+
+                // Генерируем событие storage
+                window.dispatchEvent(new Event('storage'));
 
                 totalWon += moneyWon; // Суммируем выигрыш в totalWon
+                addExperience(caseData.cost / 10);
             } else {
                 alert('Недостаточно средств!');
                 break;
@@ -190,19 +230,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addBalance() {
-        const currentTime = Date.now();
-        const timeSinceLastAdd = currentTime - lastAddBalanceTime;
+          const currentTime = Date.now();
+          const timeSinceLastAdd = currentTime - lastAddBalanceTime;
 
-        if (timeSinceLastAdd >= 60000) {
-            balance += 1000;
-            localStorage.setItem('balance', balance);
-            updateBalanceDisplay();
-            lastAddBalanceTime = currentTime;
-            localStorage.setItem('lastAddBalanceTime', lastAddBalanceTime); // Сохраняем в localStorage
-            updateAddBalanceButton();
-        }
+          if (timeSinceLastAdd >= 60000) {
+              balance += 1000;
+              localStorage.setItem('balance', balance);
+              updateBalanceDisplay();
+              lastAddBalanceTime = currentTime;
+              localStorage.setItem('lastAddBalanceTime', lastAddBalanceTime);
+              updateAddBalanceButton();
+              addExperience(20);
+          }
 
-        updateAddBalanceButton();
+          updateAddBalanceButton();
     }
 
     function updateAddBalanceButton() {
@@ -224,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBalanceDisplay();
     updateBestWinDisplay();
     updateAddBalanceButton();
+    updateUserLevelDisplay(); // Инициализация отображения уровня
 
     // Вызываем updateAddBalanceButton каждые 1000мс (1 секунда)
     setInterval(updateAddBalanceButton, 1000);
