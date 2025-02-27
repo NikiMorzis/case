@@ -389,6 +389,21 @@ main {
     color: #121826;
     transform: translateY(-3px);
 }
+.sell-button {
+    background-color: #FF6B6B; /* Красный цвет */
+    color: #fff; /* Белый текст */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.sell-button:hover {
+    background-color: #E03A3A; /* Более темный красный цвет при наведении */
+}
 
 /* Keyframes */
 @keyframes fadeIn {
