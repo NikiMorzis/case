@@ -9,9 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemElement = document.createElement('div');
                 itemElement.classList.add('inventory-item'); // Добавляем класс для стилизации
 
+                // Проверяем, существует ли item.name, и если нет, присваиваем значение по умолчанию
+                const itemName = item.name !== undefined ? item.name : "Безымянный предмет";
+
                 itemElement.innerHTML = `
-                    <img src="" alt="${item.name}">
-                    <p class="item-name">${item.name}</p>
+                    <img src="" alt="${itemName}">
+                    <p class="item-name">${itemName}</p>
                     <p class="item-price">Цена: ${item.price} ₽</p>
                     <button class="sell-button" data-item-id="${item.id}">Продать</button>
                 `;
