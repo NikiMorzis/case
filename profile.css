@@ -19,6 +19,12 @@
     color: #E6F1FF;
 }
 
+.profile-info p {
+    font-size: 1.1em;
+    color: #CCD6F6;
+    margin-bottom: 5px;
+}
+
 #profile-balance {
     font-weight: bold;
     color: #64FFDA;
