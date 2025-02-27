@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const sortAscButton = document.getElementById('sort-asc');
-    const sortDescButton = document.getElementById('sort-desc');
     const inventoryContainer = document.getElementById('inventory-container');
 
     function displayInventory(inventory) {
@@ -48,16 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function sortInventory(sortBy) {
-        let inventory = getInventoryFromLocalStorage();
-        if (sortBy === 'asc') {
-            inventory.sort((a, b) => a.price - b.price);
-        } else if (sortBy === 'desc') {
-            inventory.sort((a, b) => b.price - a.price);
-        }
-        return inventory;
-    }
-
     function sellItem(itemId) {
         let inventory = getInventoryFromLocalStorage();
         const itemIndex = inventory.findIndex(item => item.id === itemId);
@@ -78,16 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Предмет с ID ${itemId} не найден в инвентаре.`);
         }
     }
-
-    sortAscButton.addEventListener('click', () => {
-        const sortedInventory = sortInventory('asc');
-        displayInventory(sortedInventory);
-    });
-
-    sortDescButton.addEventListener('click', () => {
-        const sortedInventory = sortInventory('desc');
-        displayInventory(sortedInventory);
-    });
 
     // Изначальное отображение инвентаря при загрузке страницы
     const initialInventory = getInventoryFromLocalStorage();
