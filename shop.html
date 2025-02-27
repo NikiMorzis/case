@@ -24,6 +24,24 @@
 
         <main>
             <h1>Магазин автомобилей</h1>
+            <div class="shop-filters">
+              <label for="filter-select">Фильтр:</label>
+              <select id="filter-select">
+                <option value="all">Все</option>
+                <option value="car">Автомобили</option>
+                <option value="motorcycle">Мотоциклы</option>
+                <option value="rollsRoyce">Rolls-Royce</option>
+                <option value="bugatti">Bugatti</option>
+              </select>
+
+              <label for="sort-select">Сортировка:</label>
+              <select id="sort-select">
+                <option value="default">По умолчанию</option>
+                <option value="price-asc">По цене (возр.)</option>
+                <option value="price-desc">По цене (убыв.)</option>
+              </select>
+            </div>
+
             <div class="car-grid" id="car-grid">
                 <!-- Карточки автомобилей будут добавлены здесь -->
             </div>
