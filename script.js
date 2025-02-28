@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userLevel++;
             localStorage.setItem('userLevel', userLevel);
             localStorage.setItem('userExperience', userExperience.toFixed(2));
-            alert(`Поздравляем! Вы достигли ${userLevel} уровня!`); // Или используйте более красивое уведомление
+            // Или используйте более красивое уведомление
         }
         updateUserLevelDisplay();
     }
