@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
     let bestWin = parseFloat(localStorage.getItem('bestWin')) || 0;
     let casesOpened = parseInt(localStorage.getItem('casesOpened')) || 0;
+     let experiencePerLevel = parseFloat(localStorage.getItem('experiencePerLevel')) || 1000; // Получаем опыт для уровня
 
     // === Функции ===
     function updateBalanceDisplay() {
@@ -67,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Функция для начисления опыта ===
     function addExperience(experience) {
         let userExperience = parseFloat(localStorage.getItem('userExperience')) || 0;
-        let experiencePerLevel = 1000; // Базовый опыт для первого уровня
+          let userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
+        let experiencePerLevel = parseFloat(localStorage.getItem('experiencePerLevel')) || 1000; // Получаем опыт для уровня
 
         userExperience += experience;
         localStorage.setItem('userExperience', userExperience.toFixed(2));
@@ -75,8 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
         while (userExperience >= experiencePerLevel) {
             userExperience -= experiencePerLevel;
             userLevel++;
-            // Увеличиваем опыт для следующего уровня
-            experiencePerLevel = 1000 + (userLevel - 1) * 500; // Каждый уровень + 500 опыта
+
+            // Увеличиваем опыт для следующего уровня, используя коэффициент
+            experiencePerLevel *= 1.2; // Увеличиваем на 20%
+            localStorage.setItem('experiencePerLevel', experiencePerLevel.toFixed(2)); // Сохраняем новое значение!
 
             localStorage.setItem('userLevel', userLevel);
             localStorage.setItem('userExperience', userExperience.toFixed(2));
