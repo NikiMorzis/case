@@ -3,27 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const promoCodeInput = document.getElementById('promo-code-input');
     const activatePromoCodeButton = document.getElementById('activate-promo-code');
     const promoCodeMessage = document.getElementById('promo-code-message');
-    const userLevelElement = document.getElementById('user-level');
     const bestWinRankingElement = document.getElementById('best-win-ranking');
     const profileTotalCasesOpenedElement = document.getElementById('profile-total-cases-opened');
 
     // === Данные из Local Storage или значения по умолчанию ===
     let balance = parseFloat(localStorage.getItem('balance')) || 1000;
     let promoCodesUsed = JSON.parse(localStorage.getItem('promoCodesUsed')) || {};
-    let userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
     let bestWin = parseFloat(localStorage.getItem('bestWin')) || 0;
     let casesOpened = parseInt(localStorage.getItem('casesOpened')) || 0;
-     let experiencePerLevel = parseFloat(localStorage.getItem('experiencePerLevel')) || 1000; // Получаем опыт для уровня
 
     // === Функции ===
     function updateBalanceDisplay() {
         profileBalanceElement.textContent = balance.toFixed(2);
-    }
-
-    function updateLevelDisplay() {
-        if (userLevelElement) {
-            userLevelElement.textContent = userLevel;
-        }
     }
 
     function updateBestWinRankingDisplay() {
@@ -55,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
             promoCodeMessage.textContent = `Промокод активирован! Получено ${validPromoCodes[promoCode]} ₽`;
             promoCodeMessage.style.color = 'green';
             promoCodeInput.value = '';
-            addExperience(50);
         } else if (promoCodesUsed[promoCode]) {
             promoCodeMessage.textContent = "Этот промокод уже был активирован.";
             promoCodeMessage.style.color = 'red';
@@ -63,30 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
             promoCodeMessage.textContent = "Неверный промокод.";
             promoCodeMessage.style.color = 'red';
         }
-    }
-
-    // === Функция для начисления опыта ===
-    function addExperience(experience) {
-        let userExperience = parseFloat(localStorage.getItem('userExperience')) || 0;
-          let userLevel = parseInt(localStorage.getItem('userLevel')) || 1;
-        let experiencePerLevel = parseFloat(localStorage.getItem('experiencePerLevel')) || 1000; // Получаем опыт для уровня
-
-        userExperience += experience;
-        localStorage.setItem('userExperience', userExperience.toFixed(2));
-
-        while (userExperience >= experiencePerLevel) {
-            userExperience -= experiencePerLevel;
-            userLevel++;
-
-            // Увеличиваем опыт для следующего уровня, используя коэффициент
-            experiencePerLevel *= 1.2; // Увеличиваем на 20%
-            localStorage.setItem('experiencePerLevel', experiencePerLevel.toFixed(2)); // Сохраняем новое значение!
-
-            localStorage.setItem('userLevel', userLevel);
-            localStorage.setItem('userExperience', userExperience.toFixed(2));
-            alert(`Поздравляем! Вы достигли ${userLevel} уровня!`);
-        }
-        updateLevelDisplay();
     }
 
     function updateRankings() {
@@ -111,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === Инициализация ===
     updateBalanceDisplay();
-    updateLevelDisplay();
     updateRankings();
     updateBestWinRankingDisplay();
     updateTotalCasesOpenedDisplay();
