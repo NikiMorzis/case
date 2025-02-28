@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Функция для начисления опыта ===
     function addExperience(experience) {
         let userExperience = parseFloat(localStorage.getItem('userExperience')) || 0;
-        const experiencePerLevel = 1000;
+        let experiencePerLevel = 1000; // Базовый опыт для первого уровня
 
         userExperience += experience;
         localStorage.setItem('userExperience', userExperience.toFixed(2));
@@ -75,6 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         while (userExperience >= experiencePerLevel) {
             userExperience -= experiencePerLevel;
             userLevel++;
+            // Увеличиваем опыт для следующего уровня
+            experiencePerLevel = 1000 + (userLevel - 1) * 500; // Каждый уровень + 500 опыта
+
             localStorage.setItem('userLevel', userLevel);
             localStorage.setItem('userExperience', userExperience.toFixed(2));
             alert(`Поздравляем! Вы достигли ${userLevel} уровня!`);
